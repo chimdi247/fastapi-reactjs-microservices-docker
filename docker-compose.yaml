@@ -284,7 +284,7 @@ services:
       - app-network
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    image: mirantis/ucp-cadvisor:3.9.7
     container_name: cadvisor
     restart: unless-stopped
     privileged: true
@@ -293,6 +293,8 @@ services:
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+      - /var/lib/containerd:/var/lib/containerd:ro
+      - /run/containerd:/run/containerd:ro
     networks:
       - app-network
 
