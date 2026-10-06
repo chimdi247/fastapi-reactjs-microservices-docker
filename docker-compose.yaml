@@ -325,7 +325,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
       - ALERT_EMAIL_TO=${ALERT_EMAIL_TO:-shimdi247@gmail.com}
-      - GF_ALERTING_ENABLED=false
+      - GF_ALERTING_ENABLED=true
       - GF_UNIFIED_ALERTING_ENABLED=true
       # Delivery needs real SMTP settings (uncommented + filled in
       # below) -- alerts still fire and show in the Grafana UI without

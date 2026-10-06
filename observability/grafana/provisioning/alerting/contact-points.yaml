@@ -12,4 +12,4 @@ contactPoints:
           # and alerts will show as "firing" in the Grafana UI, but no email
           # actually sends until SMTP is configured via GF_SMTP_* env vars
           # and this address is replaced with a real one.
-          addresses: shimdi247@gmail.com
+          addresses: ${ALERT_EMAIL_TO}
