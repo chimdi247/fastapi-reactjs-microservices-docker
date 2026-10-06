@@ -36,11 +36,11 @@ datasources:
     type: postgres
     access: proxy
     url: db:5432
-    database: appdb
     user: postgres
     secureJsonData:
       password: password
     jsonData:
+      database: appdb
       sslmode: disable
       postgresVersion: 1600
       # Used for the "total users" / "total products" count panels only -
