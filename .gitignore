@@ -1,0 +1,25 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+.vscode
+
+# Frontend (Node/Vite)
+frontend/node_modules/
+frontend/dist/
+
+# Env files
+.env
+.env.*
+!.env.example
+!frontend/.env.example
+
+# Observability data volumes (bind-mounted for local runs, if ever used)
+observability/**/data/

@@ -1,0 +1,119 @@
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: resource-utilization
+    folder: "Fast Store"
+    interval: 1m
+    rules:
+      - uid: alert-container-cpu-high
+        title: Container CPU usage > 70%
+        condition: C
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Container {{ $labels.name }} CPU usage is above 70%"
+          description: "Container {{ $labels.name }} has averaged more than 70% CPU usage for 5 minutes."
+        data:
+          - refId: A
+            relativeTimeRange: { from: 600, to: 0 }
+            datasourceUid: prometheus
+            model:
+              editorMode: code
+              expr: "sum by (name) (rate(container_cpu_usage_seconds_total{name!=\"\"}[5m])) * 100"
+              instant: true
+              range: false
+              refId: A
+          - refId: C
+            datasourceUid: "__expr__"
+            model:
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator: { type: gt, params: [70] }
+              refId: C
+
+      - uid: alert-container-mem-high
+        title: Container memory usage > 70%
+        condition: C
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Container {{ $labels.name }} memory usage is above 70%"
+          description: "Container {{ $labels.name }} has used more than 70% of its memory limit for 5 minutes."
+        data:
+          - refId: A
+            relativeTimeRange: { from: 600, to: 0 }
+            datasourceUid: prometheus
+            model:
+              editorMode: code
+              expr: "sum by (name) (container_memory_usage_bytes{name!=\"\"}) / sum by (name) (container_spec_memory_limit_bytes{name!=\"\"} > 0) * 100"
+              instant: true
+              range: false
+              refId: A
+          - refId: C
+            datasourceUid: "__expr__"
+            model:
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator: { type: gt, params: [70] }
+              refId: C
+
+      - uid: alert-node-cpu-high
+        title: Node CPU usage > 70%
+        condition: C
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Host CPU usage is above 70%"
+          description: "Host {{ $labels.instance }} has averaged more than 70% CPU usage for 5 minutes."
+        data:
+          - refId: A
+            relativeTimeRange: { from: 600, to: 0 }
+            datasourceUid: prometheus
+            model:
+              editorMode: code
+              expr: "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)"
+              instant: true
+              range: false
+              refId: A
+          - refId: C
+            datasourceUid: "__expr__"
+            model:
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator: { type: gt, params: [70] }
+              refId: C
+
+      - uid: alert-node-mem-high
+        title: Node memory usage > 70%
+        condition: C
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Host memory usage is above 70%"
+          description: "Host {{ $labels.instance }} has used more than 70% of available memory for 5 minutes."
+        data:
+          - refId: A
+            relativeTimeRange: { from: 600, to: 0 }
+            datasourceUid: prometheus
+            model:
+              editorMode: code
+              expr: "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100"
+              instant: true
+              range: false
+              refId: A
+          - refId: C
+            datasourceUid: "__expr__"
+            model:
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator: { type: gt, params: [70] }
+              refId: C

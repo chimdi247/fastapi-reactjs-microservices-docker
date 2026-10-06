@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package product;
+
+service ProductService {
+    rpc GetProduct (ProductRequest) returns (ProductResponse);
+    rpc ListProducts (ListProductsRequest) returns (ListProductsResponse);
+    rpc CreateProduct (CreateProductRequest) returns (ProductResponse);
+    rpc UpdateProduct (UpdateProductRequest) returns (ProductResponse);
+    rpc DeleteProduct (ProductRequest) returns (DeleteProductResponse);
+}
+
+message ProductRequest {
+    int32 id = 1;
+}
+
+message ProductResponse {
+    int32 id = 1;
+    string name = 2;
+    float price = 3;
+    string description = 4;
+    string image_url = 5;
+}
+
+message ListProductsRequest {
+}
+
+message ListProductsResponse {
+    repeated ProductResponse products = 1;
+}
+
+message CreateProductRequest {
+    string name = 1;
+    float price = 2;
+    string description = 3;
+    string image_url = 4;
+}
+
+message DeleteProductResponse {
+    bool deleted = 1;
+}
+
+message UpdateProductRequest {
+    int32 id = 1;
+    // All fields below are optional (proto3 explicit presence): only the
+    // ones actually set by the caller get applied, everything else is
+    // left unchanged on the stored product.
+    optional string name = 2;
+    optional float price = 3;
+    optional string description = 4;
+    optional string image_url = 5;
+}

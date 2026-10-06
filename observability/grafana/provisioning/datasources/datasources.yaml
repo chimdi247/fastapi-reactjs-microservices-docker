@@ -1,0 +1,47 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    uid: prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    jsonData:
+      timeInterval: 15s
+
+  - name: Loki
+    uid: loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    jsonData:
+      derivedFields:
+        # Clicking a trace_id in a log line jumps straight to that trace in
+        # Jaeger, if the log line contains one (OTel's logging bridge
+        # attaches trace_id/span_id to log records automatically).
+        - datasourceUid: jaeger
+          matcherRegex: "trace_id=(\\w+)"
+          name: TraceID
+          url: "$${__value.raw}"
+
+  - name: Jaeger
+    uid: jaeger
+    type: jaeger
+    access: proxy
+    url: http://jaeger:16686
+
+  - name: Postgres
+    uid: postgres
+    type: postgres
+    access: proxy
+    url: db:5432
+    database: appdb
+    user: postgres
+    secureJsonData:
+      password: password
+    jsonData:
+      sslmode: disable
+      postgresVersion: 1600
+      # Used for the "total users" / "total products" count panels only -
+      # each service still only ever reads/writes its own table.

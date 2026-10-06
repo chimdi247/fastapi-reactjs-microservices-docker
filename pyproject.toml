@@ -1,0 +1,18 @@
+[project]
+name = "fast-store"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.129.0",
+    "pyjwt>=2.11.0",
+]
+
+[tool.uv.workspace]
+members = [
+    "services/user-service",
+    "services/product-service",
+    "services/order-service",
+    "services/inventory-service",
+]
