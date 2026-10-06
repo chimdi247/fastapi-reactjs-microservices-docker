@@ -1,13 +1,3 @@
-# OpenTelemetry Collector configuration.
-#
-# Every service (see shared/telemetry.py) sends traces, metrics, and logs
-# here over OTLP/gRPC. This collector is the single fan-out point:
-#   traces  -> Jaeger
-#   metrics -> exposed on :8889 for Prometheus to scrape
-#   logs    -> Loki
-#
-# Mounted read-only into the otel-collector container (docker-compose.yaml).
-
 receivers:
   otlp:
     protocols:
@@ -21,8 +11,6 @@ processors:
     timeout: 5s
     send_batch_size: 1024
 
-  # Attaches container/service resource attributes so traces, metrics, and
-  # logs can all be correlated by service.name in Grafana.
   resource:
     attributes:
       - key: service.namespace
@@ -40,8 +28,8 @@ exporters:
     resource_to_telemetry_conversion:
       enabled: true
 
-  loki:
-    endpoint: http://loki:3100/loki/api/v1/push
+  otlphttp/loki:
+    endpoint: http://loki:3100/otlp
 
   debug:
     verbosity: basic
@@ -61,4 +49,4 @@ service:
     logs:
       receivers: [otlp]
       processors: [resource, batch]
-      exporters: [loki, debug]
+      exporters: [otlphttp/loki, debug]
