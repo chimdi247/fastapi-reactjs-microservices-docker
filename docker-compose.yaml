@@ -330,7 +330,7 @@ services:
       # Delivery needs real SMTP settings (uncommented + filled in
       # below) -- alerts still fire and show in the Grafana UI without
       # them, they just won't email out. See observability/README.md.
-      - GF_SMTP_ENABLED=${GF_SMTP_ENABLED:-false}
+      - GF_SMTP_ENABLED=${GF_SMTP_ENABLED:-true}
       - GF_SMTP_HOST=${GF_SMTP_HOST:-smtp.gmail.com:587}
       - GF_SMTP_USER=${GF_SMTP_USER:-}
       - GF_SMTP_PASSWORD=${GF_SMTP_PASSWORD:-}
